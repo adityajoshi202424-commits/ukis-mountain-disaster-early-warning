@@ -22,6 +22,13 @@ export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
       badge: hasActiveAlerts ? 'LIVE' : undefined,
     },
     {
+      href: '/geospatial-intelligence',
+      label: 'Gov Geospatial AI',
+      icon: Shield,
+      exact: false,
+      badge: 'RESTRICTED',
+    },
+    {
       href: '/mountain-intelligence',
       label: 'Mountain Intelligence',
       icon: Mountain,
