@@ -134,6 +134,7 @@ def create_docx(output_path):
     # Table of Links
     links_data = [
         ("Citizen Active Alerts Dashboard", f"{LIVE_TUNNEL_URL}", "Official CAP v1.2 real-time emergency warnings (Chamoli, Rudraprayag, Uttarkashi)"),
+        ("Mountain Intelligence Hub (7 Problem Engines)", f"{LIVE_TUNNEL_URL}/mountain-intelligence", "Live empirical modeling of GLOFs, cloudbursts, canyon hydraulics, seismic cascades & sensor mortality"),
         ("Zero-Data Alert Simulator (iOS/Android)", f"{LIVE_TUNNEL_URL}/api/v1/alerts/mobile-broadcast", "3GPP TS 23.041 zero-data & grid power failure mobile broadcast test API"),
         ("Interactive AI Commander Bot", f"{LIVE_TUNNEL_URL}", "Click bottom-right floating bot. Answers evacuation queries, hazard reasons, and SOPs"),
         ("ISRO Bhuvan GIS Emergency Map", f"{LIVE_TUNNEL_URL}/emergency", "Interactive 14-hazard spatial grid, satellite/terrain layers & telemetry badges"),
@@ -377,6 +378,11 @@ def create_pdf(output_path):
             Paragraph("<b>Citizen Active Alerts</b>", td_style),
             Paragraph(f'<a href="{LIVE_TUNNEL_URL}"><u><b>{LIVE_TUNNEL_URL}</b></u></a>', link_style),
             Paragraph("Official CAP v1.2 real-time emergency warnings (Chamoli, Rudraprayag, Uttarkashi)", td_style),
+        ],
+        [
+            Paragraph("<b>Mountain Intelligence Hub</b>", td_style),
+            Paragraph(f'<a href="{LIVE_TUNNEL_URL}/mountain-intelligence"><u><b>{LIVE_TUNNEL_URL}/mountain-intelligence</b></u></a>', link_style),
+            Paragraph("Live empirical modeling of GLOFs, cloudbursts, canyon hydraulics, seismic cascades &amp; sensor mortality", td_style),
         ],
         [
             Paragraph("<b>Zero-Data Alert Simulator</b>", td_style),

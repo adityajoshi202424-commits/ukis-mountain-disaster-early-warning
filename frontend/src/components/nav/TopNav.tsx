@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AlertTriangle, MapPin, BookOpen, PhoneCall, Menu, Shield } from 'lucide-react';
+import { AlertTriangle, MapPin, BookOpen, PhoneCall, Menu, Shield, Mountain } from 'lucide-react';
 
 interface TopNavProps {
   onOpenDrawer: () => void;
@@ -20,6 +20,13 @@ export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
       icon: AlertTriangle,
       exact: true,
       badge: hasActiveAlerts ? 'LIVE' : undefined,
+    },
+    {
+      href: '/mountain-intelligence',
+      label: 'Mountain Intelligence',
+      icon: Mountain,
+      exact: false,
+      badge: 'LIVE',
     },
     {
       href: '/shelters',
