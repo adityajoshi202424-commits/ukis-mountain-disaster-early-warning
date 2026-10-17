@@ -183,11 +183,51 @@ To prevent citizen panic and ensure message comprehension across remote mountain
 
 ---
 
-## 6. System Verification & Validation Report
+## 7. Classified Geospatial Early-Warning Platform & Explainable AI (XAI) Architecture
 
-### Automated Test Suite Execution Summary:
-- **`tests/api/test_differentiation_layer.py`**: **9 PASSED** (Tiered escalation anti-fatigue checks, embedded safe route pathfinding, siren actuation).
-- **`tests/api/test_indian_emergency_platform.py`**: **16 PASSED** (NIC SMS engine, DPDP Act 2023 encryption at rest, crowdsourced reports queue, shelter live occupancy).
-- **`tests/api/test_authority_call_system.py`**: **5 PASSED** (Official authorities directory retrieval, automated voice call dispatch, bilingual speech transcripts, DTMF keypad acknowledgment).
-- **Total Backend Automated Tests**: **30 PASSED, 0 FAILED**.
-- **Frontend Next.js Production Build**: **Cleanly compiled (`next build` exited code 0)** with zero TypeScript errors across all routes.
+### 7.1 Government-Grade Role-Based Access Control (RBAC) & Clearance Gateway
+To protect sensitive disaster infrastructure from unauthorized tampering, the platform enforces strict cryptographic role-based access control under Section 51 of the Disaster Management Act, 2005:
+
+| Clearance Level | Authorized Role Profile | Statutory Jurisdiction | Permitted Command Capabilities |
+|---|---|---|---|
+| **LEVEL 4** | **District Magistrate (DM / DDMA Chairman)** | District Corridor (e.g. Chamoli, Rudraprayag) | • Issue 3GPP TS 23.041 Cell Broadcast (Channel 4370)<br>• Actuate 120dB Solar Physical Sirens<br>• Declare Mandatory Evacuation Orders<br>• Mobilize SDRF & NDRF Battalions |
+| **LEVEL 3** | **SDRF / NDRF Incident Commander** | Mountain Response Sectors | • Mobilize Quick Response Teams (QRT)<br>• Actuate 120dB Solar Physical Sirens<br>• Access Dijkstra Safe-Haven Evacuation Routes<br>• Shelter Capacity Overrides |
+| **LEVEL 2** | **USDMA SEOC State Operations Director** | State-wide (All 13 Districts) | • State-Wide Composite Surveillance<br>• Multi-District Alert Synchronization<br>• Historical Disaster Benchmark Audits<br>• Copernicus GloFAS Hydrograph Overrides |
+| **LEVEL 1** | **IMD Senior Hydrologist & Scientific Officer** | Himalayan Ridge Hydro-Met Grids | • Calibrate Manning & Caine Physics Thresholds<br>• Sensor Fault Washout Diagnostics<br>• Inspect Real-Time Isotherm Freezing Levels |
+
+---
+
+### 7.2 Historical Catastrophe Benchmark Tipping Point Matrix
+The platform continuously compares real-time Open-Meteo, Copernicus GloFAS, and USGS seismic telemetry against Uttarakhand’s most catastrophic historical benchmarks:
+
+1. **2013 Kedarnath Multi-Basin Deluge**:
+   - Benchmark: 375 mm/24h continuous rainfall; 1,450 m³/s Mandakini peak discharge; 98% soil saturation.
+   - Real-Time Comparison: Computes current rainfall & runoff ratio against the 2013 tipping point to evaluate catastrophic moraine breach probability.
+2. **2021 Chamoli Rishi Ganga Rock-Ice Avalanche & GLOF**:
+   - Benchmark: Detachment of 27M m³ hanging glacier block at 5,600m; 1,600 m³/s surge bore; 7.1 m/s debris velocity; 15-minute downstream arrival at Tapovan.
+   - Real-Time Comparison: Evaluates Copernicus GloFAS discharge rate against the 1,600 m³/s surge bore.
+3. **2023 Joshimath Land Subsidence & Aquifer Collapse**:
+   - Benchmark: Deep soil saturation >82%; slope factor of safety $FS = 0.88 < 1.0$; Main Central Thrust (MCT) tectonic faulting.
+   - Real-Time Comparison: Cross-references ECMWF 0-7cm soil moisture with Cartosat DEM slope angles to detect toe liquefaction before foundational cracking.
+
+---
+
+### 7.3 Explainable AI (XAI) Attribution Weights & Evacuation Lead Time
+Rather than functioning as an unexplainable black box, the platform computes SHAP-style normalized feature attribution weights ($100\%$ sum) for disaster management teams:
+
+$$\text{Risk}_{\text{composite}} = \left( W_{\text{rain}} \cdot P_{\text{flux}} \right) + \left( W_{\text{soil}} \cdot S_{\text{moist}} \right) + \left( W_{\text{surge}} \cdot Q_{\text{glofas}} \right) + \left( W_{\text{isotherm}} \cdot \Delta T_{\text{abl}} \right) + \left( W_{\text{seismic}} \cdot A_{\text{PGA}} \right)$$
+
+- **Manning Open-Channel Hydraulics ETA**:
+  $$V_{\text{crest}} = \frac{1}{n} R^{2/3} S^{1/2} \quad \implies \quad T_{\text{lead}} = \frac{D_{\text{settlement}}}{V_{\text{crest}}}$$
+  Yields exact actionable evacuation deadlines (e.g. **29–42 Minutes Lead Time**) to downstream settlements.
+
+---
+
+### 7.4 Live Verification & Production URLs
+
+- **Classified Geospatial Platform**: `https://frontend-rosy-phi-23.vercel.app/geospatial-intelligence`
+- **Mountain Intelligence Hub**: `https://frontend-rosy-phi-23.vercel.app/mountain-intelligence`
+- **Clearance Verification API**: `https://frontend-rosy-phi-23.vercel.app/api/v1/mountain/auth/clearance`
+- **Geospatial Risk Matrix API**: `https://frontend-rosy-phi-23.vercel.app/api/v1/mountain/geospatial/risk-matrix?district=Chamoli`
+- **GitHub Repository Remote**: `https://github.com/adityajoshi202424-commits/ukis-mountain-disaster-early-warning`
+
