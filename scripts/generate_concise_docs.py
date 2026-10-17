@@ -134,12 +134,14 @@ def create_docx(output_path):
     # Table of Links
     links_data = [
         ("Citizen Active Alerts Dashboard", f"{LIVE_TUNNEL_URL}", "Official CAP v1.2 real-time emergency warnings (Chamoli, Rudraprayag, Uttarkashi)"),
+        ("Zero-Data Alert Simulator (iOS/Android)", f"{LIVE_TUNNEL_URL}/api/v1/alerts/mobile-broadcast", "3GPP TS 23.041 zero-data & grid power failure mobile broadcast test API"),
         ("Interactive AI Commander Bot", f"{LIVE_TUNNEL_URL}", "Click bottom-right floating bot. Answers evacuation queries, hazard reasons, and SOPs"),
         ("ISRO Bhuvan GIS Emergency Map", f"{LIVE_TUNNEL_URL}/emergency", "Interactive 14-hazard spatial grid, satellite/terrain layers & telemetry badges"),
         ("DMMC Ops Control & SMS Dispatcher", f"{LIVE_TUNNEL_URL}/admin", "Tab 7: Test live multilingual SMS push & dispatch automated voice calls"),
         ("Evacuation Shelters Directory", f"{LIVE_TUNNEL_URL}/shelters", "High-ground shelter capacities, GPS coordinates & emergency supply tracking"),
         ("Citizen Emergency Guidebook", f"{LIVE_TUNNEL_URL}/guidebook", "Offline survival protocols, flash flood evacuation rules & hotlines (112 / 1070)"),
         ("Permanent 24/7 Cloud Link (Vercel)", f"{VERCEL_LIVE_URL}", "Permanent production deployment hosted on Vercel's global edge network"),
+        ("Official GitHub Repository (Dual-Sync)", "https://github.com/adityajoshi202424-commits/ukis-mountain-disaster-early-warning", "Direct git tracking repo synced with Vercel production"),
     ]
 
     tbl_links = doc.add_table(rows=1, cols=3)
@@ -377,6 +379,11 @@ def create_pdf(output_path):
             Paragraph("Official CAP v1.2 real-time emergency warnings (Chamoli, Rudraprayag, Uttarkashi)", td_style),
         ],
         [
+            Paragraph("<b>Zero-Data Alert Simulator</b>", td_style),
+            Paragraph(f'<a href="{LIVE_TUNNEL_URL}/api/v1/alerts/mobile-broadcast"><u><b>{LIVE_TUNNEL_URL}/api/v1/alerts/mobile-broadcast</b></u></a>', link_style),
+            Paragraph("3GPP TS 23.041 zero-data &amp; power-cut mobile broadcast test API (iOS &amp; Android)", td_style),
+        ],
+        [
             Paragraph("<b>Interactive AI Commander Bot</b>", td_style),
             Paragraph(f'<a href="{LIVE_TUNNEL_URL}"><u><b>{LIVE_TUNNEL_URL}</b></u></a>', link_style),
             Paragraph("Click bottom-right floating bot. Answers evacuation queries, hazard reasons, and SOPs", td_style),
@@ -405,6 +412,11 @@ def create_pdf(output_path):
             Paragraph("<b>Permanent Cloud Link (Vercel)</b>", td_style),
             Paragraph(f'<a href="{VERCEL_LIVE_URL}"><u><b>{VERCEL_LIVE_URL}</b></u></a>', link_style),
             Paragraph("Permanent production deployment hosted on Vercel's global edge network", td_style),
+        ],
+        [
+            Paragraph("<b>GitHub Repository (Dual-Sync)</b>", td_style),
+            Paragraph('<a href="https://github.com/adityajoshi202424-commits/ukis-mountain-disaster-early-warning"><u><b>github.com/.../ukis-mountain-disaster-early-warning</b></u></a>', link_style),
+            Paragraph("Public repository with dual-sync script for automated Vercel production deployment", td_style),
         ],
     ]
 
