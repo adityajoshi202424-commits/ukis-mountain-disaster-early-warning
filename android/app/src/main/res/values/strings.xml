@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">UKIS Disaster SMS Gateway</string>
+    <string name="status_label">Gateway Status:</string>
+    <string name="carrier_label">SIM Carrier:</string>
+    <string name="server_label">Central EOC Server:</string>
+    <string name="queue_label">Pending Dispatches:</string>
+    <string name="btn_start_service">Start Cellular Relay</string>
+    <string name="btn_stop_service">Stop Cellular Relay</string>
+    <string name="terminal_title">Live Mission Transmission Terminal</string>
+</resources>

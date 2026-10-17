@@ -1,0 +1,21 @@
+// ==============================================================================
+// UKIS Mountain Disaster Intelligence — iOS Staging Configuration
+// ==============================================================================
+
+APP_ENV = staging
+BUNDLE_IDENTIFIER = org.ukis.disaster.mobile.staging
+APP_NAME = UKIS Alert (Staging)
+PRODUCT_NAME = UKISAlertStaging
+
+DEFAULT_COUNTRY_CODE = IN
+DEFAULT_STATE = Uttarakhand
+DEFAULT_STATE_BOUNDING_BOX = 77.5757,28.7161,81.0475,31.4558
+
+IMD_WEATHER_ALERTS_ENDPOINT = https:/$()/mausam.imd.gov.in/api/nowcast
+NDMA_CAP_GATEWAY_URL = https:/$()/sachet.ndma.gov.in/cap_feed
+SEOC_UTTARAKHAND_FEED = https:/$()/usdma.uk.gov.in/api/v1/alerts
+
+NATIONAL_EMERGENCY_LINE = 112
+STATE_DISASTER_HELPLINE = 1070
+DISTRICT_DISASTER_HELPLINE = 1077
+CDAC_CELL_BROADCAST_RECEIVER_ID = IN_CAP_001

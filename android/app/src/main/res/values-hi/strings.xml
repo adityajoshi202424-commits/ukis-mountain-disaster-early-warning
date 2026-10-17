@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">उत्तराखंड आपदा राहत गेटवे</string>
+    <string name="status_label">गेटवे स्थिति:</string>
+    <string name="carrier_label">सक्रिय सिम नेटवर्क:</string>
+    <string name="server_label">केंद्रीय आपदा नियंत्रण कक्ष:</string>
+    <string name="queue_label">लंबित संदेश:</string>
+    <string name="btn_start_service">सेलुलर रिले चालू करें</string>
+    <string name="btn_stop_service">सेलुलर रिले बंद करें</string>
+    <string name="terminal_title">लाइव आपदा नियंत्रण टर्मिनल</string>
+</resources>

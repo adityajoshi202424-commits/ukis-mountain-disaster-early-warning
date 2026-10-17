@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    namespace 'org.ukis.disaster.sms'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "org.ukis.disaster.sms"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "DEFAULT_COUNTRY_CODE", "\"IN\""
+        buildConfigField "String", "DEFAULT_STATE", "\"Uttarakhand\""
+        buildConfigField "String", "DEFAULT_BOUNDING_BOX", "\"77.5757,28.7161,81.0475,31.4558\""
+        buildConfigField "String", "NATIONAL_EMERGENCY_LINE", "\"112\""
+        buildConfigField "String", "STATE_DISASTER_HELPLINE", "\"1070\""
+        buildConfigField "String", "DISTRICT_DISASTER_HELPLINE", "\"1077\""
+        buildConfigField "String", "CDAC_CELL_BROADCAST_ID", "\"IN_CAP_001\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Coroutines for background polling
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    // OkHttp & JSON for REST communication with UKIS Backend
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'org.json:json:20231013'
+}

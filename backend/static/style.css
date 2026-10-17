@@ -1,0 +1,635 @@
+/* --------------------------------------------------------------------------
+   Flash Flood Early Warning Platform — High-Tech Command & Control Theme
+   Palette: Deep Midnight Navy (#080d1a), High-Tech Slate Glass (#0f172a)
+   Radiant Status: Emerald (#10b981), Amber Gold (#f59e0b), Electric Orange (#f97316), Crimson Red (#ef4444)
+   Accents: Electric Cyan (#00f0ff), Sky Blue (#38bdf8)
+-------------------------------------------------------------------------- */
+
+:root {
+    /* Primary Layout Foundations */
+    --bg-primary: #080d1a;       /* Deep Midnight Canvas */
+    --bg-surface: #0f172a;       /* High-Tech Slate Glass Surface */
+    --bg-card: #0f172a;          /* Agency card container */
+    --bg-card-hover: #1e293b;    /* Card hover elevation */
+    --border-subtle: rgba(56, 189, 248, 0.18);  /* Cyber Cyan Hairline Border */
+    --border-color: rgba(56, 189, 248, 0.18);
+    --border-highlight: #38bdf8;
+
+    /* Text Typography Contrast Matrix */
+    --text-high: #f8fafc;        /* Pure Luminous White */
+    --text-primary: #f8fafc;
+    --text-medium: #cbd5e1;      /* Crisp Cool Slate */
+    --text-secondary: #cbd5e1;
+    --text-mono: #94a3b8;        /* High-Readability Metric Monospace */
+    --text-muted: #64748b;
+
+    /* Semantic Telemetry Context Indicators (Vivid & High-Contrast) */
+    --status-nominal: #10b981;   /* Radiant Emerald */
+    --color-green: #10b981;
+    --status-medium: #f59e0b;    /* Solar Amber Gold */
+    --color-amber: #f59e0b;
+    --status-alert: #ef4444;     /* Vivid Crimson Red */
+    --color-red: #ef4444;
+    --color-orange: #f97316;
+    --color-cyan: #00f0ff;
+    --color-purple: #818cf8;
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-primary);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.10) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-high);
+    font-family: var(--font-sans);
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   Header & Operational Navigation
+-------------------------------------------------------------------------- */
+.app-header {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--status-medium);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.brand-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-high);
+    letter-spacing: -0.02em;
+}
+
+.region-tag {
+    font-size: 11px;
+    color: var(--text-medium);
+    font-family: var(--font-mono);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mode-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-medium);
+}
+
+.mode-replay {
+    background-color: #24221c;
+    border-color: var(--status-medium);
+    color: #e5c07b;
+}
+
+.mode-scenario {
+    background-color: #281d1a;
+    border-color: var(--status-alert);
+    color: #e06c75;
+}
+
+.live-indicator-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #e5c07b;
+}
+
+.btn-secondary {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-high);
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #2d3237;
+    border-color: var(--border-highlight);
+}
+
+/* --------------------------------------------------------------------------
+   Main Layout Grid
+-------------------------------------------------------------------------- */
+.main-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr 380px;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+    background-color: var(--bg-primary);
+}
+
+.panel {
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-right {
+    border-right: none;
+    border-left: 1px solid var(--border-subtle);
+}
+
+.panel-center {
+    background-color: var(--bg-primary);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.panel-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-medium);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Timeline & Replay Clock
+-------------------------------------------------------------------------- */
+.timeline-header-bar {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clock-display-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.clock-label {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-mono);
+    text-transform: uppercase;
+}
+
+.clock-time {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-high);
+    background-color: var(--bg-primary);
+    padding: 4px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+}
+
+.step-indicator {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-medium);
+    padding: 4px 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Compact Control Panel & Form Inputs
+-------------------------------------------------------------------------- */
+.control-row {
+    margin-bottom: 10px;
+}
+
+.control-label {
+    display: block;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-mono);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.select-input, .text-input {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-high);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.select-input:focus, .text-input:focus {
+    border-color: var(--border-highlight);
+}
+
+.btn-group {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.btn-control {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-high);
+    padding: 6px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-control:hover {
+    background-color: #2d3237;
+    border-color: var(--border-highlight);
+}
+
+.btn-control.active {
+    background-color: var(--status-nominal);
+    border-color: #4d7352;
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Live Telemetry Metrics (High Data Density)
+-------------------------------------------------------------------------- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.metric-tile {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 10px;
+    border-radius: 2px;
+}
+
+.metric-label {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    color: var(--text-mono);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.metric-value {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-high);
+}
+
+.metric-unit {
+    font-size: 10px;
+    color: var(--text-medium);
+    margin-left: 2px;
+    font-weight: 400;
+}
+
+.velocity-alert {
+    color: #e06c75 !important;
+}
+
+.velocity-warning {
+    color: #e5c07b !important;
+}
+
+.velocity-nominal {
+    color: #98c379 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Judge Transparency "WHY?" Panel
+-------------------------------------------------------------------------- */
+.why-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.why-table tr {
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.why-table td {
+    padding: 8px 6px;
+    vertical-align: top;
+}
+
+.why-label {
+    width: 65px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-mono);
+    font-size: 10px;
+}
+
+.why-content {
+    color: var(--text-high);
+    line-height: 1.35;
+}
+
+.why-code {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #e5c07b;
+    background-color: var(--bg-primary);
+    padding: 2px 4px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Objective Evaluation Matrix (Post-Event Scorecard)
+-------------------------------------------------------------------------- */
+.scorecard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.scorecard-item {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 6px 8px;
+    border-radius: 2px;
+}
+
+.scorecard-title {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    color: var(--text-mono);
+    text-transform: uppercase;
+}
+
+.scorecard-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-high);
+    margin-top: 2px;
+}
+
+.lead-time-highlight {
+    background-color: #24221c;
+    border-color: var(--status-medium);
+    grid-column: span 2;
+    padding: 8px 10px;
+}
+
+.lead-time-val {
+    font-size: 18px;
+    color: #e5c07b;
+}
+
+/* --------------------------------------------------------------------------
+   Failure & Outage Simulation Switch
+-------------------------------------------------------------------------- */
+.outage-box {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.toggle-switch-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-label {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-high);
+}
+
+.toggle-subtext {
+    font-size: 10px;
+    color: var(--text-mono);
+    margin-top: 4px;
+    line-height: 1.3;
+}
+
+.toggle-btn {
+    background-color: #2f3438;
+    border: 1px solid #454d54;
+    color: var(--text-medium);
+    padding: 4px 10px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.toggle-btn.degraded {
+    background-color: var(--status-alert);
+    border-color: #a83838;
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   GIS Map Canvas Layout
+-------------------------------------------------------------------------- */
+.map-canvas-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #121416;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    background-color: #121416;
+}
+
+.map-overlay-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1000;
+    background-color: rgba(34, 37, 40, 0.92);
+    border: 1px solid var(--border-subtle);
+    padding: 6px 12px;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-high);
+    pointer-events: none;
+}
+
+.map-legend {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    z-index: 1000;
+    background-color: rgba(34, 37, 40, 0.92);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 12px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    color: var(--text-medium);
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   Data Sources Modal
+-------------------------------------------------------------------------- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 2px;
+    padding: 24px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-high);
+    font-family: var(--font-mono);
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-medium);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.provenance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 12px;
+}
+
+.provenance-table th {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 8px;
+    text-align: left;
+    font-family: var(--font-mono);
+    color: var(--text-mono);
+}
+
+.provenance-table td {
+    border: 1px solid var(--border-subtle);
+    padding: 8px;
+    color: var(--text-high);
+}

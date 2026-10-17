@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* FEMA / Official Federal & State Disaster Portal Light Palette */
+  --gov-canvas: #F8FAFC;         /* Crisp, clean slate-50 light background */
+  --gov-surface: #FFFFFF;        /* Pure white card surface */
+  --gov-card-border: #E2E8F0;    /* Crisp, clean slate-200 border */
+  --gov-card-header: #0B3C5D;    /* Classic federal navy header banner */
+  
+  --text-high: #0F172A;          /* Slate 900 for primary headings & text */
+  --text-medium: #334155;        /* Slate 700 for readable body copy */
+  --text-low: #64748B;           /* Slate 500 for metadata & sublabels */
+
+  /* Indian Tricolor Official Standards */
+  --tricolor-saffron: #FF9933;   /* Bhagwa / India Saffron */
+  --tricolor-white: #FFFFFF;     /* Pure White */
+  --tricolor-green: #138808;     /* India Green */
+
+  /* Official NDMA / DMMC Hazard Alert Matrix (WCAG AA Contrast Verified) */
+  --ndma-normal: #166534;        /* Dark Emerald */
+  --ndma-normal-bg: #F0FDF4;     /* Light Emerald Tint */
+  --ndma-watch: #C2410C;         /* Severe Amber */
+  --ndma-watch-bg: #FFF7ED;      /* Light Amber Tint */
+  --ndma-alert: #C2410C;         /* Deep Orange */
+  --ndma-alert-bg: #FFF7ED;      /* Light Orange Tint */
+  --ndma-warning: #D32F2F;       /* Official Crimson Warning */
+  --ndma-warning-bg: #FEF2F2;    /* Light Red Tint */
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--gov-canvas);
+  color: var(--text-high);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* 4px Official Indian Tricolor Ribbon */
+.tricolor-ribbon {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%);
+}
+
+/* Clean Federal Government Card Container */
+.gov-card {
+  background-color: var(--gov-surface);
+  border: 1px solid var(--gov-card-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.gov-card-header {
+  background: #0B3C5D;
+  color: #FFFFFF;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #082A42;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gov-card-body {
+  padding: 18px;
+  background-color: #FFFFFF;
+  color: var(--text-medium);
+}
+
+.gov-card-footer {
+  background-color: #F8FAFC;
+  border-top: 1px solid var(--gov-card-border);
+  padding: 10px 18px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-low);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Emergency Heartbeat Animation for Crimson Warning State */
+@keyframes emergency-heartbeat {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6); }
+  50% { transform: scale(1.006); box-shadow: 0 0 12px 2px rgba(211, 47, 47, 0.4); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6); }
+}
+
+.emergency-alert-pulse {
+  animation: emergency-heartbeat 2s infinite ease-in-out;
+  background-color: var(--ndma-warning);
+  color: #FFFFFF;
+}

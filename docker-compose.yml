@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  # --- PostgreSQL + PostGIS ---
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: flashflood-db
+    environment:
+      POSTGRES_DB: flashflood
+      POSTGRES_USER: flashflood
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-devpassword}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flashflood"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- Redis (task queue + caching) ---
+  redis:
+    image: redis:7-alpine
+    container_name: flashflood-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- Backend API ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: flashflood-backend
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - ./data_cache:/app/data_cache
+
+  # --- Frontend (Next.js) ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: flashflood-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+volumes:
+  pgdata:

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIH Demonstration & Evaluation — Flash Flood Early Warning Platform</title>
+    <!-- Leaflet GIS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="theme-charcoal">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <div class="brand-badge">UKIS 2026 / PROBLEM STATEMENT P-011</div>
+            <h1 class="brand-title">AI Mountain Disaster Early-Warning Intelligence</h1>
+            <span class="region-tag">Uttarakhand (Alaknanda, Bhagirathi & Mandakini Corridors)</span>
+        </div>
+        <div class="header-right">
+            <div id="dataModeBadge" class="mode-badge mode-replay">
+                <span class="pulse-dot"></span>
+                <span id="modeText">◷ HISTORICAL REPLAY MODE</span>
+            </div>
+            <button id="btnViewSources" class="btn-secondary" onclick="openSourcesModal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                VIEW DATA SOURCES
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs-bar">
+        <button id="tabHistorical" class="tab-btn active" onclick="switchTab('historical')">
+            <span>◷ Historical Replay & Evaluation</span>
+        </button>
+        <button id="tabScenario" class="tab-btn scenario-tab" onclick="switchTab('scenario')">
+            <span>⚠ Scenario Simulation (+20% Rainfall Offset)</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- Control Bar & Chronological Clock -->
+        <section class="control-panel card">
+            <div class="control-grid">
+                <!-- Dropdown Selectors -->
+                <div class="control-group">
+                    <label class="control-label">STATE</label>
+                    <select id="selectState" class="form-select" onchange="onStateChange()">
+                        <option value="Uttarakhand">Uttarakhand</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">DISTRICT</label>
+                    <select id="selectDistrict" class="form-select" onchange="onDistrictChange()">
+                        <option value="Chamoli">Chamoli (Joshimath)</option>
+                        <option value="Rudraprayag">Rudraprayag (Kedarnath)</option>
+                        <option value="Uttarkashi">Uttarkashi (Bhagirathi)</option>
+                    </select>
+                </div>
+                <div class="control-group" style="flex: 2;">
+                    <label class="control-label">HISTORICAL FLOOD EVENT</label>
+                    <select id="selectEvent" class="form-select" onchange="onEventChange()">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">INFERENCE MODEL</label>
+                    <select id="selectModel" class="form-select" onchange="onModelChange()">
+                        <option value="ResNet-UNet-v2.4.1">ResNet-UNet-v2.4.1 (Deep Hydro-Grid)</option>
+                        <option value="XGBoost-HydroSurge-v1.8">XGBoost-HydroSurge-v1.8 (Rate-of-Rise)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Playback Bar -->
+            <div class="playback-bar">
+                <div class="playback-actions">
+                    <button id="btnPlay" class="btn-primary" onclick="togglePlay()">
+                        <span id="playIcon">▶</span> <span id="playText">Play</span>
+                    </button>
+                    <button id="btnStep" class="btn-control" onclick="stepForward()" title="Step Forward 15 mins">⏭ Step (15m)</button>
+                    <button id="btnReset" class="btn-control" onclick="resetReplay()" title="Reset to Start">↺ Reset</button>
+                    <div class="speed-controls">
+                        <span class="speed-label">Speed:</span>
+                        <button class="speed-btn active" onclick="setSpeed(1, this)">1x</button>
+                        <button class="speed-btn" onclick="setSpeed(5, this)">5x</button>
+                        <button class="speed-btn" onclick="setSpeed(10, this)">10x</button>
+                        <button class="speed-btn" onclick="setSpeed(50, this)">50x</button>
+                    </div>
+                </div>
+
+                <!-- Digital Replay Clock -->
+                <div class="digital-clock-container">
+                    <div class="clock-badge">SIMULATED CHRONOLOGICAL CLOCK (ZERO-LEAKAGE)</div>
+                    <div id="digitalClock" class="digital-clock">2024-07-14 04:00:00 UTC</div>
+                    <div id="timelineProgress" class="timeline-step-info">Step 1 of 57 (04:00 to 18:00 UTC)</div>
+                </div>
+            </div>
+
+            <!-- Timeline Scrubber -->
+            <div class="timeline-scrubber-container">
+                <input type="range" id="timelineSlider" min="0" max="100" value="0" class="timeline-slider" oninput="onSliderScrub(this.value)">
+                <div class="timeline-markers">
+                    <span id="markerStart">04:00 UTC (Start)</span>
+                    <span id="markerBreach" class="marker-breach">⚠ 14:30 UTC (Observed Breach Impact)</span>
+                    <span id="markerEnd">18:00 UTC (End)</span>
+                </div>
+            </div>
+
+            <!-- Fault Tolerance & Scenario Controls -->
+            <div class="experimental-bar">
+                <div class="fault-tolerance-toggle">
+                    <label class="switch-label">
+                        <input type="checkbox" id="toggleCwcOutage" onchange="onToggleOutage(this.checked)">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-text">
+                        <strong>Simulate CWC Gauge Outage</strong>
+                        <small>(Tests automatic failover to Sentinel-3 Altimetry)</small>
+                    </span>
+                </div>
+
+                <div class="fault-tolerance-toggle">
+                    <label class="switch-label">
+                        <input type="checkbox" id="toggleEvacRoute" onchange="onToggleEvacRoute(this.checked)">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-text">
+                        <strong style="color: #e5c07b;">Show Safest Evacuation Paths</strong>
+                        <small>(Dynamic GIS flood-evasion routing to high-ground shelter)</small>
+                    </span>
+                </div>
+
+                <div id="scenarioControlBox" class="scenario-control-box" style="display: none;">
+                    <span class="scenario-label">⚠ Hypothetical Rainfall Offset:</span>
+                    <input type="range" id="rainfallOffsetSlider" min="-30" max="60" value="20" step="5" oninput="onRainfallOffsetChange(this.value)">
+                    <span id="rainfallOffsetDisplay" class="offset-val">+20%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warning Alert Banner (Dynamic) -->
+        <div id="warningBanner" class="alert-banner alert-hidden">
+            <div class="alert-icon">⚠</div>
+            <div class="alert-content">
+                <div class="alert-title" id="alertTitle">EARLY WARNING TRIGGERED</div>
+                <div class="alert-desc" id="alertDesc">High convective precipitation velocity and steep river rise detected.</div>
+            </div>
+            <div class="alert-lead-time" id="alertLeadTime">
+                <span class="lead-label">PROJECTED LEAD TIME</span>
+                <span class="lead-val" id="leadTimeVal">5.0 Hours</span>
+            </div>
+        </div>
+
+        <!-- Split-Pane: Live Telemetry Grid vs GIS Map -->
+        <div class="split-pane">
+            <!-- Left Pane: Incoming Telemetry Feed (timestamp <= T_curr) -->
+            <section class="telemetry-pane card">
+                <div class="pane-header">
+                    <h2>Live Gated Telemetry Feed</h2>
+                    <span id="dataQualityBadge" class="badge badge-good">DATA QUALITY: GOOD</span>
+                </div>
+                <p class="pane-subtitle">Strictly filtered: <code>timestamp &lt;= currentReplayTime</code>. Zero lookahead.</p>
+
+                <!-- Metric Gauges -->
+                <div class="telemetry-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Rainfall Rate</span>
+                        <div class="metric-value-row">
+                            <span id="valRainfall" class="metric-val">8.0</span>
+                            <span class="metric-unit">mm/hr</span>
+                        </div>
+                        <span id="valRainVelocity" class="metric-delta">ΔP/Δt: +0.0 mm/hr</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <span class="metric-label">River Water Level</span>
+                        <div class="metric-value-row">
+                            <span id="valRiverLevel" class="metric-val">26.40</span>
+                            <span class="metric-unit">meters</span>
+                        </div>
+                        <span id="valRiverSurge" class="metric-delta">ΔH/Δt: +0.12 m/hr</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <span class="metric-label">Soil Saturation</span>
+                        <div class="metric-value-row">
+                            <span id="valSoilSat" class="metric-val">72.0</span>
+                            <span class="metric-unit">%</span>
+                        </div>
+                        <span id="valSatMultiplier" class="metric-delta">Runoff Coeff: 1.0x</span>
+                    </div>
+
+                    <div class="metric-card risk-metric-card" id="riskCard">
+                        <span class="metric-label">Inundation Probability</span>
+                        <div class="metric-value-row">
+                            <span id="valRiskProb" class="metric-val">0.05</span>
+                            <span class="metric-unit" id="valRiskBadge">LOW RISK</span>
+                        </div>
+                        <span id="valHorizon" class="metric-delta">Horizon: 120 mins</span>
+                    </div>
+                </div>
+
+                <!-- Active Telemetry Stations -->
+                <div class="stations-section">
+                    <h3>Active Station Sensors in Region</h3>
+                    <div id="stationsList" class="stations-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Outage Notification Box (if degraded) -->
+                <div id="outageNotification" class="outage-notification" style="display: none;">
+                    <div class="outage-icon">⚠</div>
+                    <div class="outage-text">
+                        <strong>Source Outage Active:</strong> Physical CWC Gauge offline. Failover protocol initiated: Using JAXA/Sentinel-3 satellite radar altimetry.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: GIS Risk Map Surface -->
+            <section class="map-pane card">
+                <div class="pane-header">
+                    <h2>Spatiotemporal Inundation & Risk Surface</h2>
+                    <div class="map-legend">
+                        <span class="legend-item"><span class="dot dot-green"></span> Low</span>
+                        <span class="legend-item"><span class="dot dot-amber"></span> Medium</span>
+                        <span class="legend-item"><span class="dot dot-red"></span> High Hazard</span>
+                        <span class="legend-item"><span class="box box-purple"></span> Ground Truth</span>
+                    </div>
+                </div>
+                <div id="gisMap" class="gis-map-canvas"></div>
+                <div id="groundTruthNotice" class="map-footer-notice">
+                    🔒 <strong>Ground Truth Sequestration:</strong> Actual breach polygons remain hidden until simulated timestamp crosses observed impact time.
+                </div>
+            </section>
+        </div>
+
+        <!-- Judge Transparency Panel ("WHY?") -->
+        <section class="transparency-panel card">
+            <div class="pane-header">
+                <h2>Judge Transparency & Decision Attribution Panel ("WHY?")</h2>
+                <span class="badge badge-neutral">DECISION SUPPORT TRACEABILITY</span>
+            </div>
+
+            <div class="transparency-grid">
+                <div class="trans-item">
+                    <span class="trans-label">WHAT?</span>
+                    <span id="transWhat" class="trans-val">Convective Monsoon Runoff & Embankment Surge</span>
+                </div>
+                <div class="trans-item">
+                    <span class="trans-label">WHERE?</span>
+                    <span id="transWhere" class="trans-val">Chamoli District (Alaknanda & Rishiganga Gorge)</span>
+                </div>
+                <div class="trans-item">
+                    <span class="trans-label">WHEN?</span>
+                    <span id="transWhen" class="trans-val">Impact projected in 45-60 minutes</span>
+                </div>
+                <div class="trans-item trans-span-2">
+                    <span class="trans-label">WHY? (CRITICAL HYDROLOGICAL DRIVERS)</span>
+                    <span id="transWhy" class="trans-val text-amber">Baseline dry-weather conditions. Telemetry nominal.</span>
+                </div>
+                <div class="trans-item">
+                    <span class="trans-label">DATA PROVENANCE</span>
+                    <span id="transData" class="trans-val">IMD AWS, CWC Gauge #42, ISRO MOSDAC Soil</span>
+                </div>
+                <div class="trans-item">
+                    <span class="trans-label">MODEL & UNCERTAINTY</span>
+                    <span id="transModel" class="trans-val">ResNet-UNet-v2.4.1 (±8.0% uncertainty)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Objective Evaluation Dashboard (Final Post-Event Metrics) -->
+        <section class="evaluation-dashboard card">
+            <div class="pane-header">
+                <h2>Post-Event Objective Evaluation Matrix</h2>
+                <span class="badge badge-eval">VERIFIABLE MATHEMATICAL METRICS (NO PLACEHOLDERS)</span>
+            </div>
+
+            <div class="eval-metrics-grid">
+                <div class="eval-card highlight-card">
+                    <span class="eval-label">Warning Lead Time</span>
+                    <span id="metricLeadTime" class="eval-val-lg text-green">6.5 Hours</span>
+                    <span class="eval-sub">Actual Impact - Earliest High Risk Warning</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">Precision (PPV)</span>
+                    <span id="metricPrecision" class="eval-val">0.914</span>
+                    <span class="eval-sub">TP / (TP + FP)</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">Recall (Sensitivity)</span>
+                    <span id="metricRecall" class="eval-val">0.880</span>
+                    <span class="eval-sub">TP / (TP + FN)</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">F1-Score</span>
+                    <span id="metricF1" class="eval-val">0.897</span>
+                    <span class="eval-sub">Harmonic Mean (P & R)</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">False Alarm Rate</span>
+                    <span id="metricFAR" class="eval-val">0.086</span>
+                    <span class="eval-sub">FP / (FP + TN)</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">Missed Event Rate</span>
+                    <span id="metricMissed" class="eval-val">0.120</span>
+                    <span class="eval-sub">FN / (TP + FN)</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">Spatial Overlap (IoU)</span>
+                    <span id="metricIoU" class="eval-val">0.784</span>
+                    <span class="eval-sub">Predicted ∩ Actual Extent</span>
+                </div>
+
+                <div class="eval-card">
+                    <span class="eval-label">Brier Calibration Score</span>
+                    <span id="metricCalibration" class="eval-val">0.912</span>
+            </div>
+        </section>
+
+        <!-- Emergency SMS Router Audit Stream -->
+        <section class="card" style="margin-top: 16px; border: 1px solid #2f3438; background: #222528; padding: 14px 16px; border-radius: 2px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h3 style="font-size: 11px; font-family: var(--font-mono); font-weight: 700; color: #6b7280; letter-spacing: 1px; text-transform: uppercase; margin: 0;">
+                        COMMUNICATION &amp; EMERGENCY SMS ROUTER AUDIT STREAM
+                    </h3>
+                    <span style="font-size: 10px; font-family: var(--font-mono); color: #98c379; background: #1b261d; border: 1px solid #3b593f; padding: 2px 6px; border-radius: 2px;">
+                        ● FAILSAFE ACTIVE: REPLAY INTERCEPT
+                    </span>
+                </div>
+                <div style="display: flex; gap: 4px;">
+                    <button class="vernacular-btn active" onclick="setReplayLanguage('en', this)" style="background: #2f3438; border: 1px solid #e5c07b; color: #f3f4f6; font-size: 10px; font-family: var(--font-mono); padding: 2px 8px; border-radius: 2px; cursor: pointer;">EN</button>
+                    <button class="vernacular-btn" onclick="setReplayLanguage('hi', this)" style="background: #191b1d; border: 1px solid #2f3438; color: #9ca3af; font-size: 10px; font-family: var(--font-mono); padding: 2px 8px; border-radius: 2px; cursor: pointer;">HI (हिंदी)</button>
+                    <button class="vernacular-btn" onclick="setReplayLanguage('as', this)" style="background: #191b1d; border: 1px solid #2f3438; color: #9ca3af; font-size: 10px; font-family: var(--font-mono); padding: 2px 8px; border-radius: 2px; cursor: pointer;">AS (অসমীয়া)</button>
+                    <button class="vernacular-btn" onclick="setReplayLanguage('bn', this)" style="background: #191b1d; border: 1px solid #2f3438; color: #9ca3af; font-size: 10px; font-family: var(--font-mono); padding: 2px 8px; border-radius: 2px; cursor: pointer;">BN (বাংলা)</button>
+                </div>
+            </div>
+            <div id="terminalLogStream" style="background: #191b1d; border: 1px solid #2f3438; border-radius: 2px; padding: 10px 14px; max-height: 140px; overflow-y: auto; font-family: var(--font-mono); font-size: 11px; line-height: 1.6; color: #9ca3af;">
+                <div style="color: #6b7280;">[06:00 UTC] TELEMETRY_STREAM: 15-minute sensor delta nominal. Monitoring rate-of-rise calculus...</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Data Sources Modal -->
+    <div id="sourcesModal" class="modal-backdrop" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2>Verified Data Source Providers & Provenance</h2>
+                <button class="modal-close-btn" onclick="closeSourcesModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Every telemetry stream utilized by the evaluation engine is sourced from official operational infrastructure without synthetic substitution.</p>
+                <div id="sourcesList" class="sources-list-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeSourcesModal()">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

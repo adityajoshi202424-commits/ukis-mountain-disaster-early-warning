@@ -1,0 +1,25 @@
+// ==============================================================================
+// UKIS Mountain Disaster Intelligence — iOS Production Configuration
+// ==============================================================================
+
+APP_ENV = production
+BUNDLE_IDENTIFIER = org.ukis.disaster.mobile
+APP_NAME = UKIS Disaster Alert
+PRODUCT_NAME = UKISAlert
+
+DEFAULT_COUNTRY_CODE = IN
+DEFAULT_STATE = Uttarakhand
+DEFAULT_STATE_BOUNDING_BOX = 77.5757,28.7161,81.0475,31.4558
+
+IMD_WEATHER_ALERTS_ENDPOINT = https:/$()/mausam.imd.gov.in/api/nowcast
+NDMA_CAP_GATEWAY_URL = https:/$()/sachet.ndma.gov.in/cap_feed
+SEOC_UTTARAKHAND_FEED = https:/$()/usdma.uk.gov.in/api/v1/alerts
+CWC_HYDROLOGY_ENDPOINT = https:/$()/nwdp.nwic.gov.in/api/discharge
+NCS_SEISMIC_FEED_URL = https:/$()/riseq.seismo.gov.in/earthquake/json
+ISRO_BHUVAN_GEOPORTAL_TILE_URI = https:/$()/bhuvan-wms.nrsc.gov.in/wms
+
+NATIONAL_EMERGENCY_LINE = 112
+STATE_DISASTER_HELPLINE = 1070
+DISTRICT_DISASTER_HELPLINE = 1077
+AMBULANCE_HELPLINE = 108
+CDAC_CELL_BROADCAST_RECEIVER_ID = IN_CAP_001
