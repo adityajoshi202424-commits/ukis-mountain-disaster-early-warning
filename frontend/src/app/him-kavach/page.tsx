@@ -30,18 +30,34 @@ import {
   RotateCcw,
   Sparkles,
   PhoneCall,
-  Sliders
+  Sliders,
+  Camera,
+  Bus,
+  Navigation,
+  Cpu,
+  Server
 } from 'lucide-react';
 import { TopNav } from '@/components/nav/TopNav';
 import { GovFooter } from '@/components/layout/GovFooter';
 import { CitizenDrawer } from '@/components/nav/CitizenDrawer';
 import { useLanguage } from '@/context/LanguageContext';
 import { HIM_KAVACH_SECTORS, CASCADING_SIMULATION_STEPS, HimKavachSector } from '@/types/him_kavach';
+import { JanDrishtiModule } from '@/components/him-kavach/JanDrishtiModule';
+import { CharDhamBalancerModule } from '@/components/him-kavach/CharDhamBalancerModule';
+import { RescueAviationModule } from '@/components/him-kavach/RescueAviationModule';
+import { DamTelemetryModule } from '@/components/him-kavach/DamTelemetryModule';
+import { AiDetectionPipelineModule } from '@/components/him-kavach/AiDetectionPipelineModule';
+import { FailoverArchitectureModule } from '@/components/him-kavach/FailoverArchitectureModule';
 
 export default function HimKavachPlatformPage() {
   const { locale, setLocale, t } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [lowBandwidth, setLowBandwidth] = useState(false);
+
+  // State Blueprint Active Tab (7 Pillars)
+  const [activeBlueprintTab, setActiveBlueprintTab] = useState<
+    'RISK_ENGINE' | 'JAN_DRISHTI' | 'CHARDHAM_BALANCER' | 'RESCUE_AVIATION' | 'DAM_TELEMETRY' | 'AI_PIPELINE' | 'FAILOVER_DR'
+  >('RISK_ENGINE');
 
   // Pitch Flow Steps (1 to 5)
   const [pitchStep, setPitchStep] = useState<number>(1);
@@ -250,9 +266,64 @@ export default function HimKavachPlatformPage() {
         </div>
       </section>
 
+      {/* State-Level Production Blueprint Navigation Bar (7 Pillars) */}
+      <nav className="bg-slate-900 border-b border-slate-800 sticky top-[69px] z-20 shadow-md backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 overflow-x-auto py-2 scrollbar-none text-xs font-mono">
+          <span className="text-slate-400 font-bold uppercase tracking-wider text-[11px] pr-2 hidden lg:inline">
+            STATE BLUEPRINT:
+          </span>
+          {[
+            { id: 'RISK_ENGINE', label: '1. Explainable Risk & Map', icon: Compass },
+            { id: 'JAN_DRISHTI', label: '2. "जन-दृष्टि" Vision AI', icon: Camera, badge: '+15% Boost' },
+            { id: 'CHARDHAM_BALANCER', label: '3. चारधाम Yatra Balancer', icon: Bus, badge: 'UTDB Live' },
+            { id: 'RESCUE_AVIATION', label: '4. Rescue Aviation Windows', icon: Navigation, badge: 'IAF/SDRF' },
+            { id: 'DAM_TELEMETRY', label: '5. Dam & Barrage Telemetry', icon: Waves, badge: 'SDSO' },
+            { id: 'AI_PIPELINE', label: '6. AI Pipeline & 3-Min HITL', icon: Cpu, badge: 'CAP v1.2' },
+            { id: 'FAILOVER_DR', label: '7. Active-Active Failover Grid', icon: Server, badge: 'RTO<10s' },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeBlueprintTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveBlueprintTab(tab.id as any)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg whitespace-nowrap transition-all font-bold ${
+                  isActive
+                    ? 'bg-amber-500 text-slate-950 shadow-md'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span
+                    className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                      isActive ? 'bg-slate-950 text-amber-300' : 'bg-slate-800 text-slate-400 border border-slate-700'
+                    }`}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* PITCH BAR HIGHLIGHTER: Explains Current Evaluation Dimension */}
-        <div className="bg-slate-900 border border-amber-500/40 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+        {/* Render Specific Blueprint Modules */}
+        {activeBlueprintTab === 'JAN_DRISHTI' && <JanDrishtiModule />}
+        {activeBlueprintTab === 'CHARDHAM_BALANCER' && <CharDhamBalancerModule />}
+        {activeBlueprintTab === 'RESCUE_AVIATION' && <RescueAviationModule />}
+        {activeBlueprintTab === 'DAM_TELEMETRY' && <DamTelemetryModule />}
+        {activeBlueprintTab === 'AI_PIPELINE' && <AiDetectionPipelineModule />}
+        {activeBlueprintTab === 'FAILOVER_DR' && <FailoverArchitectureModule />}
+
+        {/* Core Explainable Risk Engine & Interactive Map */}
+        {activeBlueprintTab === 'RISK_ENGINE' && (
+          <>
+            {/* PITCH BAR HIGHLIGHTER: Explains Current Evaluation Dimension */}
+            <div className="bg-slate-900 border border-amber-500/40 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-xl">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500 flex items-center justify-center text-amber-400 font-bold font-mono">
               {pitchStep}
@@ -765,7 +836,9 @@ export default function HimKavachPlatformPage() {
             </div>
           </div>
         </div>
-      </main>
+      </>
+    )}
+  </main>
 
       <GovFooter />
     </div>

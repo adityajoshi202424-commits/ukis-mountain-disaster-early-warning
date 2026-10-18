@@ -128,7 +128,7 @@ export default function ActiveAlertsLandingPage() {
         hasActiveAlerts={hasCriticalAlert}
       />
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main id="main-content" className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Official Headline Banner */}
         <div className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-xs flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">

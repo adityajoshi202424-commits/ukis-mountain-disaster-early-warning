@@ -13,7 +13,7 @@ interface TopNavProps {
 
 export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
   const pathname = usePathname();
-  const { locale, t } = useLanguage();
+  const { locale, t, fontSize, setFontSize, highContrast, toggleHighContrast } = useLanguage();
 
   const getNavLabel = (key: string) => {
     switch (key) {
@@ -88,8 +88,78 @@ export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+      {/* Screen reader skip link (GIGW 3.0 / WCAG 2.1 AA) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-1.5 focus:bg-amber-400 focus:text-slate-950 focus:font-bold focus:rounded-md focus:shadow-lg focus:outline-none"
+      >
+        Skip to main content
+      </a>
+
       {/* 4px Official Indian Tricolor Ribbon */}
       <div className="h-1 w-full bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808]" />
+
+      {/* GIGW 3.0 Accessibility & State Helpline Bar */}
+      <div className="bg-slate-950 text-white text-[11px] px-4 sm:px-6 py-1 flex items-center justify-between font-mono border-b border-slate-800">
+        <div className="flex items-center gap-3">
+          <span className="hidden sm:inline text-slate-300 font-bold">STATE EMERGENCY HELPLINES:</span>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-amber-400 font-bold">SEOC: 1070</span>
+            <span className="text-slate-500">|</span>
+            <span className="text-amber-400 font-bold">DEOC: 1077</span>
+            <span className="text-slate-500">|</span>
+            <span className="text-red-400 font-bold flex items-center gap-1">
+              <PhoneCall className="w-3 h-3 animate-pulse" />
+              SOS: 112
+            </span>
+          </div>
+        </div>
+
+        {/* Accessibility Controls: Font Resizing & High Contrast (GIGW 3.0) */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center border border-slate-700 rounded overflow-hidden">
+            <button
+              onClick={() => setFontSize('normal')}
+              className={`px-1.5 py-0.5 text-[10px] font-bold ${
+                fontSize === 'normal' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+              title="Standard Font Size (A-)"
+            >
+              A-
+            </button>
+            <button
+              onClick={() => setFontSize('large')}
+              className={`px-1.5 py-0.5 text-[10px] font-bold border-l border-r border-slate-700 ${
+                fontSize === 'large' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+              title="Large Font Size (A)"
+            >
+              A
+            </button>
+            <button
+              onClick={() => setFontSize('larger')}
+              className={`px-1.5 py-0.5 text-[10px] font-bold ${
+                fontSize === 'larger' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:text-white'
+              }`}
+              title="Extra Large Font Size (A+)"
+            >
+              A+
+            </button>
+          </div>
+
+          <button
+            onClick={toggleHighContrast}
+            className={`px-2 py-0.5 rounded text-[10px] font-bold border transition ${
+              highContrast
+                ? 'bg-amber-400 text-slate-950 border-amber-300 font-black'
+                : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
+            }`}
+            title="Toggle High-Contrast Mode (GIGW 3.0)"
+          >
+            ◐ Contrast
+          </button>
+        </div>
+      </div>
 
       {/* Official Government Identity Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3 text-xs border-b border-slate-100">

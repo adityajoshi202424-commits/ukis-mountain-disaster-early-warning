@@ -16,6 +16,10 @@ interface LanguageContextType {
     areaDesc: string;
     severityLabel: string;
   };
+  fontSize: 'normal' | 'large' | 'larger';
+  setFontSize: (size: 'normal' | 'large' | 'larger') => void;
+  highContrast: boolean;
+  toggleHighContrast: () => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -23,6 +27,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<DmmcLocale>('en-IN');
   const [mounted, setMounted] = useState(false);
+  const [fontSize, setFontSizeState] = useState<'normal' | 'large' | 'larger'>('normal');
+  const [highContrast, setHighContrastState] = useState(false);
 
   // Read saved language preference from localStorage on mount
   useEffect(() => {
@@ -32,6 +38,29 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLocaleState(saved);
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (highContrast) {
+      document.documentElement.classList.add('contrast-more');
+    } else {
+      document.documentElement.classList.remove('contrast-more');
+    }
+  }, [highContrast]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (fontSize === 'large') {
+      document.documentElement.style.fontSize = '17px';
+    } else if (fontSize === 'larger') {
+      document.documentElement.style.fontSize = '18.5px';
+    } else {
+      document.documentElement.style.fontSize = '';
+    }
+  }, [fontSize]);
+
+  const toggleHighContrast = () => setHighContrastState((prev) => !prev);
+  const setFontSize = (size: 'normal' | 'large' | 'larger') => setFontSizeState(size);
 
   const setLocale = (newLocale: DmmcLocale) => {
     setLocaleState(newLocale);
@@ -201,7 +230,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, t, translateDistrict, translateAlert }}>
+    <LanguageContext.Provider
+      value={{
+        locale,
+        setLocale,
+        t,
+        translateDistrict,
+        translateAlert,
+        fontSize,
+        setFontSize,
+        highContrast,
+        toggleHighContrast,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );

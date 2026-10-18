@@ -47,6 +47,11 @@ export function GovFooter() {
             </Link>
           </div>
           <div>
+            <Link href="/him-kavach" className="hover:text-blue-700 font-bold text-indigo-900">
+              🛡️ HIM-KAVACH XAI Platform (UKIS)
+            </Link>
+          </div>
+          <div>
             <Link href="/admin" className="text-slate-500 hover:text-slate-800">
               DMMC Staff Control Room (Restricted)
             </Link>
@@ -65,7 +70,7 @@ export function GovFooter() {
           <p className="text-slate-600">ISRO NRSC Bhuvan Spatial Services</p>
         </div>
 
-        {/* Col 4: 24x7 Helplines */}
+        {/* Col 4: 24x7 Helplines & Compliance */}
         <div className="space-y-2">
           <span className="text-slate-900 font-bold block uppercase tracking-wider text-xs">
             24x7 Emergency Helplines
@@ -84,11 +89,25 @@ export function GovFooter() {
               <strong className="text-slate-900">1077</strong>
             </div>
           </div>
+
+          <div className="flex flex-wrap gap-1.5 pt-1 text-[10px] font-mono">
+            <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+              ✓ GIGW 3.0 Validated
+            </span>
+            <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300 font-bold">
+              ✓ STQC Audited
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="border-t border-slate-200 py-3 text-center text-[11px] text-slate-500 bg-slate-200/50">
-        &copy; 2026 Disaster Mitigation and Management Centre (DMMC), Government of Uttarakhand. Developed in accordance with NDMA and DPDP Act 2023 guidelines.
+      <div className="border-t border-slate-200 py-3 text-center text-[11px] text-slate-500 bg-slate-200/50 space-y-0.5">
+        <div>
+          &copy; 2026 Disaster Mitigation and Management Centre (DMMC), Government of Uttarakhand. Developed in accordance with GIGW 3.0, NDMA and DPDP Act 2023 guidelines.
+        </div>
+        <div className="text-[10px] text-slate-400">
+          Hosted at UKSDC (ITDA Dehradun) with Active-Active Failover on MeghRaj GI Cloud (NIC National Data Centre).
+        </div>
       </div>
     </footer>
   );
