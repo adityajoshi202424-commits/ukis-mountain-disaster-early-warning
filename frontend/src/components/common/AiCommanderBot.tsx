@@ -119,12 +119,12 @@ export function AiCommanderBot() {
 
   return (
     <>
-      {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* Floating Action Button - Positioned on bottom-left to prevent blocking SOS 112 and right-hand action controls */}
+      <div className="fixed bottom-6 left-6 z-50">
         {!isOpen ? (
           <button
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-red-700 via-rose-700 to-amber-700 hover:from-red-800 hover:to-amber-800 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-xs uppercase tracking-wider border-2 border-amber-300/40 transform hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-red-700 via-rose-700 to-amber-700 hover:from-red-800 hover:to-amber-800 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-xs uppercase tracking-wider border-2 border-amber-300/40 transform hover:-translate-y-0.5"
             aria-label="Open AI Mountain Commander Assistant"
           >
             <div className="relative">
@@ -133,16 +133,16 @@ export function AiCommanderBot() {
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500" />
             </div>
             <span>AI Disaster Commander</span>
-            <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full ml-1 font-mono">
+            <span className="hidden sm:inline bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full ml-1 font-mono">
               Live Bot
             </span>
           </button>
         ) : null}
       </div>
 
-      {/* Slide-out Interactive Chat Panel */}
+      {/* Slide-out Interactive Chat Panel - Anchored to bottom-left */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[620px] transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className="fixed bottom-6 left-6 z-50 w-[calc(100vw-3rem)] sm:max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[620px] max-h-[85vh] transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
           {/* Header */}
           <div className="px-5 py-3.5 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5">

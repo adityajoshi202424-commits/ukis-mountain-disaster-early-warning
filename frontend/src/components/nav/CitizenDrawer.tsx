@@ -12,7 +12,9 @@ import {
   WifiOff, 
   PhoneCall, 
   CheckCircle2, 
-  Check
+  Check,
+  Shield,
+  ChevronRight
 } from 'lucide-react';
 import { DmmcLocale, DMMC_LOCALIZATIONS } from '@/lib/dmmc_localization';
 
@@ -333,6 +335,43 @@ export function CitizenDrawer({
                 </div>
               </a>
             </div>
+          </div>
+
+          <hr className="border-slate-100" />
+
+          {/* 5. DMMC Administrative Operations Portal */}
+          <div>
+            <label className="font-bold text-xs text-slate-700 uppercase tracking-wider block mb-2">
+              {currentLocale === 'hi-IN'
+                ? 'अधिकारी एवं आपदा नियंत्रण कक्ष'
+                : currentLocale === 'gbm-IN'
+                ? 'अधिकारी अर आपदा नियंत्रण कक्ष'
+                : currentLocale === 'kfy-IN'
+                ? 'अधिकारी अर आपदा नियंत्रण कक्ष'
+                : 'Official Command & Control'}
+            </label>
+            <Link
+              href="/admin"
+              onClick={onClose}
+              className="flex items-center justify-between p-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-900 rounded-lg transition-colors group"
+            >
+              <div className="flex items-center gap-2.5">
+                <Shield className="w-4 h-4 text-red-700" />
+                <div>
+                  <span className="block text-xs font-bold text-red-950">
+                    {currentLocale === 'hi-IN'
+                      ? 'DMMC राज्य आपदा संचालन केंद्र (Admin)'
+                      : 'DMMC State Operations Center (Admin)'}
+                  </span>
+                  <span className="block text-[10px] text-red-700">
+                    {currentLocale === 'hi-IN'
+                      ? 'आपातकालीन अलर्ट जारी करें, सायरन व कॉल नियंत्रण'
+                      : 'Manual CAP issuance, siren tests & phone calls'}
+                  </span>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-red-600 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </div>
 
