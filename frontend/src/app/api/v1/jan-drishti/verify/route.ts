@@ -2,6 +2,35 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
+export async function GET() {
+  return NextResponse.json({
+    status: 'ONLINE',
+    service: 'Jan-Drishti Crowdsourced Computer Vision Verification API',
+    model: 'YOLOv8-MountainGeoHazards-v2 + Llama-3-Vision-Edge',
+    presets: [
+      {
+        id: 'TENSION_CRACK',
+        label: 'Tension Crack on Hillside Retaining Wall',
+        sector: 'Joshimath - Marwari Flank (NH-07)',
+        riskBoost: 15,
+      },
+      {
+        id: 'MURKY_SEEPAGE',
+        label: 'Turbid / Muddy Seepage (Matmaila Pani)',
+        sector: 'Alaknanda Riverbed Toe Slope (Helang)',
+        riskBoost: 15,
+      },
+      {
+        id: 'ROCKFALL_DEBRIS',
+        label: 'Fresh Scree & Rockfall Talus on Carriage-way',
+        sector: 'Lambagarh Slide Zone (NH-07)',
+        riskBoost: 15,
+      },
+    ],
+    supportedInputTypes: ['WhatsApp Webhook Payload', 'PWA Geotagged Upload', 'Apda Mitra Field Report'],
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
