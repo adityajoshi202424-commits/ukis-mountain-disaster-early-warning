@@ -15,6 +15,7 @@ import {
   Snowflake
 } from 'lucide-react';
 import { CapAlertItem, AlertSeverity, HimalayanHazardType } from '@/types/shared_cap';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface AlertCardProps {
   alert: CapAlertItem;
@@ -28,7 +29,7 @@ const SEVERITY_CONFIG: Record<
     badgeText: string;
     borderLeft: string;
     icon: React.ElementType;
-    label: string;
+    labelKey: 'CRITICAL' | 'SEVERE' | 'ADVISORY' | 'NORMAL';
   }
 > = {
   CRITICAL: {
@@ -36,28 +37,28 @@ const SEVERITY_CONFIG: Record<
     badgeText: 'text-white',
     borderLeft: 'border-l-red-700',
     icon: AlertOctagon,
-    label: 'CRITICAL WARNING',
+    labelKey: 'CRITICAL',
   },
   SEVERE: {
     badgeBg: 'bg-amber-700',
     badgeText: 'text-white',
     borderLeft: 'border-l-amber-700',
     icon: AlertTriangle,
-    label: 'SEVERE ALERT',
+    labelKey: 'SEVERE',
   },
   ADVISORY: {
     badgeBg: 'bg-amber-800',
     badgeText: 'text-white',
     borderLeft: 'border-l-amber-800',
     icon: Info,
-    label: 'ADVISORY WATCH',
+    labelKey: 'ADVISORY',
   },
   NORMAL: {
     badgeBg: 'bg-emerald-700',
     badgeText: 'text-white',
     borderLeft: 'border-l-emerald-700',
     icon: Info,
-    label: 'NORMAL WATCH',
+    labelKey: 'NORMAL',
   },
 };
 
@@ -74,6 +75,7 @@ const HAZARD_ICONS: Record<string, React.ElementType> = {
 };
 
 export function AlertCard({ alert, onSelect }: AlertCardProps) {
+  const { locale, t, translateAlert, translateDistrict } = useLanguage();
   const anyAlert = alert as any;
   const severity: AlertSeverity = alert.severity || 'ADVISORY';
   const sevConfig = SEVERITY_CONFIG[severity] || SEVERITY_CONFIG.ADVISORY;
@@ -81,9 +83,11 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
   const rawHazard = (alert.hazardType || anyAlert.hazard_type || 'FLASH_FLOOD') as HimalayanHazardType;
   const HazardIcon = HAZARD_ICONS[rawHazard] || ShieldAlert;
 
-  const headline = anyAlert.headline || alert.localized?.['en-IN']?.headline || 'Emergency Warning';
-  const instruction = anyAlert.instruction || alert.localized?.['en-IN']?.instruction || '';
-  const district = alert.districts?.[0] || anyAlert.district || 'Chamoli';
+  const localizedAlert = translateAlert(alert);
+  const headline = localizedAlert.headline;
+  const instruction = localizedAlert.instruction;
+  const rawDistrict = alert.districts?.[0] || anyAlert.district || 'Chamoli';
+  const district = translateDistrict(rawDistrict);
   const riverBasin = anyAlert.river_basin || '';
   const sentTimeStr = alert.sent || anyAlert.sent_time || new Date().toISOString();
 
@@ -91,6 +95,27 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
     hour: '2-digit',
     minute: '2-digit',
   });
+
+  const getActionLabel = () => {
+    if (locale === 'hi-IN') return 'आवश्यक कार्रवाई:';
+    if (locale === 'gbm-IN') return 'बचाव कु हुकुम:';
+    if (locale === 'kfy-IN') return 'बचाव कु हुकुम:';
+    return 'Action Required:';
+  };
+
+  const getIssuedLabel = () => {
+    if (locale === 'hi-IN') return 'जारी';
+    if (locale === 'gbm-IN') return 'जारी बखत';
+    if (locale === 'kfy-IN') return 'जारी बखत';
+    return 'Issued';
+  };
+
+  const getViewDetailsLabel = () => {
+    if (locale === 'hi-IN') return 'पूर्ण विवरण एवं मानचित्र देखें';
+    if (locale === 'gbm-IN') return 'नक्शा अर पूरा विवरण देखा';
+    if (locale === 'kfy-IN') return 'नक्श अर पूरो विवरण देखा';
+    return 'View Details & Map';
+  };
 
   return (
     <article
@@ -104,7 +129,7 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold ${sevConfig.badgeBg} ${sevConfig.badgeText}`}
           >
             <SevIcon className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>{sevConfig.label}</span>
+            <span>{t.severityLabels[sevConfig.labelKey] || sevConfig.labelKey}</span>
           </span>
 
           <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
@@ -116,7 +141,7 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
         {/* Timestamp */}
         <div className="flex items-center gap-1 text-xs font-mono text-slate-500">
           <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Issued {formattedTime}</span>
+          <span>{getIssuedLabel()} {formattedTime}</span>
         </div>
       </div>
 
@@ -129,7 +154,7 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
         {instruction && (
           <p className="text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded p-2.5 leading-relaxed">
             <strong className="text-slate-900 uppercase text-xs block mb-0.5">
-              Action Required:
+              {getActionLabel()}
             </strong>
             {instruction}
           </p>
@@ -141,7 +166,7 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
         <div className="flex items-center gap-3 text-xs text-slate-600">
           <span className="flex items-center gap-1 font-semibold text-slate-800">
             <MapPin className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-            <span>{district} District</span>
+            <span>{district}</span>
           </span>
           {riverBasin && (
             <span className="hidden sm:inline text-slate-500">
@@ -155,7 +180,7 @@ export function AlertCard({ alert, onSelect }: AlertCardProps) {
           className="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 py-1 px-2 rounded hover:bg-blue-50 transition-colors"
           aria-label={`View details for alert: ${headline}`}
         >
-          <span>View Details &amp; Map</span>
+          <span>{getViewDetailsLabel()}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>

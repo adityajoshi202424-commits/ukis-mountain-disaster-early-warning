@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { GlobalStatusBar } from '@/components/layout/GlobalStatusBar';
 import { GovNavbar } from '@/components/layout/GovNavbar';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 export const metadata: Metadata = {
   title: 'UKIS 2026 (P-011) | AI Mountain Disaster Early-Warning Intelligence — USDMA Devbhoomi',
@@ -49,10 +50,12 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-900 selection:text-white">
-        <div id="main-content" className="flex-1 flex flex-col min-w-0">
-          {children}
-        </div>
-        <GlobalStatusBar />
+        <LanguageProvider>
+          <div id="main-content" className="flex-1 flex flex-col min-w-0">
+            {children}
+          </div>
+          <GlobalStatusBar />
+        </LanguageProvider>
       </body>
     </html>
   );

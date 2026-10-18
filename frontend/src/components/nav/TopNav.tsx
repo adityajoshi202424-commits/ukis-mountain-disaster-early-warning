@@ -3,7 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AlertTriangle, MapPin, BookOpen, PhoneCall, Menu, Shield, Mountain } from 'lucide-react';
+import { AlertTriangle, MapPin, BookOpen, PhoneCall, Menu, Shield, Mountain, Activity } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface TopNavProps {
   onOpenDrawer: () => void;
@@ -12,38 +13,74 @@ interface TopNavProps {
 
 export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
   const pathname = usePathname();
+  const { locale, t } = useLanguage();
+
+  const getNavLabel = (key: string) => {
+    switch (key) {
+      case 'alerts':
+        return t.tabs?.alerts || 'Active Alerts';
+      case 'himKavach':
+        if (locale === 'hi-IN') return 'हिम-कवच (XAI)';
+        if (locale === 'gbm-IN') return 'हिम-कवच (XAI)';
+        if (locale === 'kfy-IN') return 'हिम-कवच (XAI)';
+        return 'HIM-KAVACH (XAI)';
+      case 'geospatial':
+        if (locale === 'hi-IN') return 'भू-स्थानिक एआई';
+        if (locale === 'gbm-IN') return 'भू-स्थानिक एआई';
+        if (locale === 'kfy-IN') return 'भू-स्थानिक एआई';
+        return 'Gov Geospatial AI';
+      case 'mountain':
+        if (locale === 'hi-IN') return 'पर्वतीय बुद्धिमत्ता';
+        if (locale === 'gbm-IN') return 'डांड्युं मा आफत चेताउनी';
+        if (locale === 'kfy-IN') return 'डांड मा आफत चेताउनी';
+        return 'Mountain Intelligence';
+      case 'shelters':
+        return t.tabs?.map || 'Live Map & Shelters';
+      case 'guidebook':
+        return t.tabs?.guidebook || 'Emergency Guidebook';
+      default:
+        return '';
+    }
+  };
 
   const navItems = [
     {
       href: '/',
-      label: 'Active Alerts',
+      label: getNavLabel('alerts'),
       icon: AlertTriangle,
       exact: true,
       badge: hasActiveAlerts ? 'LIVE' : undefined,
     },
     {
+      href: '/him-kavach',
+      label: getNavLabel('himKavach'),
+      icon: Activity,
+      exact: false,
+      badge: 'UKIS FLAGSHIP',
+    },
+    {
       href: '/geospatial-intelligence',
-      label: 'Gov Geospatial AI',
+      label: getNavLabel('geospatial'),
       icon: Shield,
       exact: false,
       badge: 'RESTRICTED',
     },
     {
       href: '/mountain-intelligence',
-      label: 'Mountain Intelligence',
+      label: getNavLabel('mountain'),
       icon: Mountain,
       exact: false,
       badge: 'LIVE',
     },
     {
       href: '/shelters',
-      label: 'Live Map & Shelters',
+      label: getNavLabel('shelters'),
       icon: MapPin,
       exact: false,
     },
     {
       href: '/guidebook',
-      label: 'Emergency Guidebook',
+      label: getNavLabel('guidebook'),
       icon: BookOpen,
       exact: false,
     },
@@ -63,14 +100,26 @@ export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-slate-900 uppercase tracking-tight text-[12px]">
-                उत्तराखंड शासन &bull; Govt. of Uttarakhand
+                {locale === 'hi-IN'
+                  ? 'उत्तराखंड शासन • Govt. of Uttarakhand'
+                  : locale === 'gbm-IN'
+                  ? 'उत्तराखंड सरकार • Govt. of Uttarakhand'
+                  : locale === 'kfy-IN'
+                  ? 'उत्तराखंड सरकार • Govt. of Uttarakhand'
+                  : 'उत्तराखंड शासन • Govt. of Uttarakhand'}
               </span>
               <span className="hidden sm:inline-block text-[10px] text-blue-900 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded font-semibold">
                 DMMC Official
               </span>
             </div>
             <p className="text-[11px] text-slate-600 font-medium">
-              Disaster Mitigation &amp; Management Centre &bull; Early Warning
+              {locale === 'hi-IN'
+                ? 'आपदा न्यूनीकरण एवं प्रबंधन केंद्र • प्रारंभिक चेतावनी प्रणाली'
+                : locale === 'gbm-IN'
+                ? 'आपदा प्रबंधन केंद्र • डांड्युं मा आफत की पैली चेताउनी'
+                : locale === 'kfy-IN'
+                ? 'आपदा प्रबंधन केंद्र • डांड मा आफत की पैली चेताउनी'
+                : 'Disaster Mitigation & Management Centre • Early Warning'}
             </p>
           </div>
         </div>
@@ -128,7 +177,15 @@ export function TopNav({ onOpenDrawer, hasActiveAlerts = false }: TopNavProps) {
           aria-label="Open citizen services and language settings menu"
         >
           <Menu className="w-4 h-4 text-slate-700" />
-          <span className="hidden sm:inline">Services &amp; Settings</span>
+          <span className="hidden sm:inline">
+            {locale === 'hi-IN'
+              ? 'सेवाएँ एवं सेटिंग्स'
+              : locale === 'gbm-IN'
+              ? 'सेवा अर व्यवस्था'
+              : locale === 'kfy-IN'
+              ? 'सेवा अर खाता'
+              : 'Services & Settings'}
+          </span>
         </button>
       </div>
     </header>
